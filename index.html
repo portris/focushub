@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FocusHub – ToDo</title>
+  <link rel="stylesheet" href="styles/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <header>
+    <h1>📝 FocusHub – Aufgaben</h1>
+    <button id="theme-toggle" class="theme-toggle">🌙</button>
+  </header>
+
+  <main class="todo-app">
+    <form id="task-form">
+      <input type="text" id="task-input" placeholder="Neue Aufgabe..." required />
+      <button type="submit"><i class="fas fa-plus"></i></button>
+    </form>
+
+    <ul id="task-list"></ul>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> FocusHub by Richard Franken</p>
+  </footer>
+
+  <script src="scripts/main.js"></script>
+</body>
+</html>
