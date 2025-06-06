@@ -3,23 +3,36 @@ document.getElementById("year").textContent = new Date().getFullYear();
 
 // Darkmode
 const themeToggle = document.getElementById("theme-toggle");
-themeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-  localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-});
-if (localStorage.getItem("theme") === "dark") {
-  document.body.classList.add("dark");
+if (themeToggle) {
+  const body = document.body;
+
+  // Beim Laden prüfen
+  if (localStorage.getItem('theme') === 'dark') {
+    body.classList.add('dark');
+    themeToggle.textContent = '☀️';
+  }
+
+  // Klick-Handler
+  themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark');
+    const isDark = body.classList.contains('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+  });
 }
 
 // ToDo-Funktionalität
 const taskForm = document.getElementById("task-form");
 const taskInput = document.getElementById("task-input");
 const taskList = document.getElementById("task-list");
+
 const categoryForm = document.getElementById("category-form");
 const categoryNameInput = document.getElementById("new-category-name");
 const categoryColorInput = document.getElementById("new-category-color");
 const categoryList = document.getElementById("category-list");
 const categorySelect = document.getElementById("task-category");
+
+const categoryFilter = document.getElementById("category-filter");
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let categories = JSON.parse(localStorage.getItem("categories")) || [
@@ -35,12 +48,22 @@ function saveCategories() {
 }
 
 function renderCategoryOptions() {
+  // Für das Eingabeformular
   categorySelect.innerHTML = "";
+
+  // Für den Filter
+  categoryFilter.innerHTML = '<option value="Alle">Alle</option>';
+
   categories.forEach(cat => {
-    const opt = document.createElement("option");
-    opt.value = cat.name;
-    opt.textContent = cat.name;
-    categorySelect.appendChild(opt);
+    const opt1 = document.createElement("option");
+    opt1.value = cat.name;
+    opt1.textContent = cat.name;
+    categorySelect.appendChild(opt1);
+
+    const opt2 = document.createElement("option");
+    opt2.value = cat.name;
+    opt2.textContent = cat.name;
+    categoryFilter.appendChild(opt2);
   });
 }
 
@@ -80,24 +103,28 @@ window.removeCategory = function(index) {
 
 function renderTasks() {
   taskList.innerHTML = "";
-  tasks.forEach((task, index) => {
-    const li = document.createElement("li");
-    const cat = categories.find(c => c.name === task.category);
-    const color = cat ? cat.color : "#666";
-    li.className = task.done ? "done" : "";
-li.innerHTML = `
-  <div class="task-text">
-    <span class="task-label">${task.text}</span>
-    <span class="badge" style="background:${color}">${task.category}</span>
-  </div>
-  <div class="task-actions">
-    <button onclick="toggleDone(${index})" class="action-btn check"><i class="fas fa-check"></i></button>
-    <button onclick="deleteTask(${index})" class="action-btn delete"><i class="fas fa-trash"></i></button>
-  </div>
-`;
+  const selectedCategory = categoryFilter.value;
 
-    taskList.appendChild(li);
-  });
+  tasks
+    .filter(task => selectedCategory === "Alle" || task.category === selectedCategory)
+    .forEach((task, index) => {
+      const cat = categories.find(c => c.name === task.category);
+      const color = cat ? cat.color : "#666";
+
+      const li = document.createElement("li");
+      li.className = task.done ? "done" : "";
+      li.innerHTML = `
+        <div class="task-text">
+          <span class="task-label">${task.text}</span>
+          <span class="badge" style="background:${color}">${task.category}</span>
+        </div>
+        <div class="task-actions">
+          <button onclick="toggleDone(${index})" class="action-btn check"><i class="fas fa-check"></i></button>
+          <button onclick="deleteTask(${index})" class="action-btn delete"><i class="fas fa-trash"></i></button>
+        </div>
+      `;
+      taskList.appendChild(li);
+    });
 }
 
 taskForm.addEventListener("submit", (e) => {
@@ -108,6 +135,8 @@ taskForm.addEventListener("submit", (e) => {
   saveTasks();
   renderTasks();
 });
+
+categoryFilter.addEventListener("change", renderTasks);
 
 window.toggleDone = function(index) {
   tasks[index].done = !tasks[index].done;

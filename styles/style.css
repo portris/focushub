@@ -174,3 +174,17 @@ form select {
   color: white;
   font-size: 0.75rem;
 }
+
+/*Filter Sektion */
+#filter-section {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+#filter-section select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: var(--card);
+  color: var(--text);
+}
