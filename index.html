@@ -16,10 +16,20 @@
   <main class="todo-app">
     <form id="task-form">
       <input type="text" id="task-input" placeholder="Neue Aufgabe..." required />
+      <select id="task-category">
+      </select>
       <button type="submit"><i class="fas fa-plus"></i></button>
     </form>
-
     <ul id="task-list"></ul>
+    <section id="category-manager">
+        <h3>Kategorien verwalten</h3>
+        <form id="category-form">
+            <input type="text" id="new-category-name" placeholder="Neue Kategorie" required />
+             <input type="color" id="new-category-color" value="#6c757d" />
+             <button type="submit">➕ Hinzufügen</button>
+        </form>
+        <ul id="category-list"></ul>
+    </section>
   </main>
 
   <footer>
