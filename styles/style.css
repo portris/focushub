@@ -188,3 +188,12 @@ form select {
   background: var(--card);
   color: var(--text);
 }
+
+/*Projekt Design*/
+#project-manager {
+  margin-top: 2rem;
+  background: var(--card);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}

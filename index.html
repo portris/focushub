@@ -14,6 +14,14 @@
   </header>
 
   <main class="todo-app">
+<section id="project-manager">
+  <h3>Projekte verwalten</h3>
+  <form id="project-form">
+    <input type="text" id="new-project-name" placeholder="Neues Projekt" required />
+    <button type="submit">➕ Hinzufügen</button>
+  </form>
+  <ul id="project-list"></ul>
+</section>
 
     <section id="filter-section">
   <label for="category-filter">Kategorie filtern:</label>
@@ -27,10 +35,13 @@
       <input type="text" id="task-input" placeholder="Neue Aufgabe..." required />
       <select id="task-category">
       </select>
+      <select id="task-project" required>
+  <option value="" disabled selected>Projekt wählen</option>
+</select>
       <button type="submit"><i class="fas fa-plus"></i></button>
     </form>
     <ul id="task-list"></ul>
-    
+
     <section id="category-manager">
         <h3>Kategorien verwalten</h3>
         <form id="category-form">

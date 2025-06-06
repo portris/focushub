@@ -34,10 +34,18 @@ const categorySelect = document.getElementById("task-category");
 
 const categoryFilter = document.getElementById("category-filter");
 
+const projectForm = document.getElementById("project-form");
+const projectNameInput = document.getElementById("new-project-name");
+const projectList = document.getElementById("project-list");
+const projectSelect = document.getElementById("task-project");
+
+
+
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let categories = JSON.parse(localStorage.getItem("categories")) || [
   { name: "Allgemein", color: "#6c757d" }
 ];
+let projects = JSON.parse(localStorage.getItem("projects")) || ["Standardprojekt"];
 
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -46,6 +54,53 @@ function saveTasks() {
 function saveCategories() {
   localStorage.setItem("categories", JSON.stringify(categories));
 }
+
+function saveProjects() {
+  localStorage.setItem("projects", JSON.stringify(projects));
+}
+
+function renderProjectOptions() {
+  projectSelect.innerHTML = '<option value="" disabled selected>Projekt wählen</option>';
+  projects.forEach(name => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    projectSelect.appendChild(opt);
+  });
+}
+
+function renderProjectList() {
+  projectList.innerHTML = "";
+  projects.forEach((name, index) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span>${name}</span>
+      <button onclick="removeProject(${index})" class="action-btn delete"><i class="fas fa-trash"></i></button>
+    `;
+    projectList.appendChild(li);
+  });
+}
+
+window.removeProject = function(index) {
+  const removed = projects.splice(index, 1)[0];
+  tasks = tasks.filter(task => task.project !== removed);
+  saveProjects();
+  saveTasks();
+  renderTasks();
+  renderProjectOptions();
+  renderProjectList();
+};
+
+projectForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = projectNameInput.value.trim();
+  if (!name || projects.includes(name)) return;
+  projects.push(name);
+  saveProjects();
+  renderProjectOptions();
+  renderProjectList();
+  projectForm.reset();
+});
 
 function renderCategoryOptions() {
   // Für das Eingabeformular
@@ -110,12 +165,13 @@ function renderTasks() {
     .forEach((task, index) => {
       const cat = categories.find(c => c.name === task.category);
       const color = cat ? cat.color : "#666";
+      const projectName = task.project ? `<em>(${task.project})</em>` : "";
 
       const li = document.createElement("li");
       li.className = task.done ? "done" : "";
       li.innerHTML = `
         <div class="task-text">
-          <span class="task-label">${task.text}</span>
+          <span class="task-label">${task.text} ${projectName}</span>
           <span class="badge" style="background:${color}">${task.category}</span>
         </div>
         <div class="task-actions">
@@ -130,7 +186,8 @@ function renderTasks() {
 taskForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const category = document.getElementById("task-category").value;
-  tasks.push({ text: taskInput.value, done: false, category });
+  const project = projectSelect.value;
+  tasks.push({ text: taskInput.value, done: false, category, project });
   taskInput.value = "";
   saveTasks();
   renderTasks();
@@ -150,6 +207,8 @@ window.deleteTask = function(index) {
   renderTasks();
 };
 
+renderProjectOptions();
+renderProjectList();
 renderCategoryOptions(); // Kategorie-Dropdown befüllen
 renderCategoryList();    // Kategorieverwaltung anzeigen
 renderTasks();           // Aufgabenliste anzeigen
