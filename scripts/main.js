@@ -39,8 +39,9 @@ const projectNameInput = document.getElementById("new-project-name");
 const projectList = document.getElementById("project-list");
 const projectSelect = document.getElementById("task-project");
 
-const kanbanProject = localStorage.getItem("activeProject") || "Standardprojekt";
-document.getElementById("active-project-name").textContent = kanbanProject;
+const activeProject = getActiveProject();
+document.getElementById("active-project-name").textContent = getActiveProject();
+document.getElementById("form-project-name").textContent = getActiveProject();
 const todoContainer = document.getElementById("todo-tasks");
 const inprogressContainer = document.getElementById("inprogress-tasks");
 const doneContainer = document.getElementById("done-tasks");
@@ -52,7 +53,7 @@ const boardTaskForm = document.getElementById("board-task-form");
 const boardTaskInput = document.getElementById("board-task-input");
 const boardCategorySelect = document.getElementById("board-task-category");
 const boardStatusSelect = document.getElementById("board-task-status");
-formProjectName.textContent = kanbanProject;
+formProjectName.textContent = getActiveProject();
 
 const adminSwitcher = document.getElementById("admin-switcher");
 const formSections = {
@@ -259,50 +260,59 @@ function renderKanban() {
 
   const activeProject = getActiveProject();
 
-  tasks
-    .filter(task => task.project === activeProject)
-    .forEach((task, index) => {
-      const taskElement = document.createElement("div");
-      taskElement.className = "kanban-task";
-      taskElement.setAttribute("draggable", "true");
-      taskElement.dataset.index = index;
+  // Projektname im UI aktualisieren
+  document.getElementById("active-project-name").textContent = activeProject;
+  document.getElementById("form-project-name").textContent = activeProject;
 
-      // Drag Start
-      taskElement.addEventListener("dragstart", e => {
-        e.dataTransfer.setData("text/plain", index.toString());
-      });
+  tasks.forEach((task, taskIndex) => {
+    if (task.project !== activeProject) return;
 
-      // Inneres HTML mit Status-Buttons
-      taskElement.innerHTML = `
-        <div class="kanban-text">${task.text}</div>
-        <div class="kanban-controls">
-          <button class="status-btn" data-status="todo">📝</button>
-          <button class="status-btn" data-status="inprogress">🔄</button>
-          <button class="status-btn" data-status="done">✅</button>
-        </div>
-      `;
+    const taskElement = document.createElement("div");
+    taskElement.className = "kanban-task";
+    taskElement.setAttribute("draggable", "true");
+    taskElement.dataset.index = taskIndex;
 
-      // Status-Buttons funktionieren korrekt
-      taskElement.querySelectorAll(".status-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const newStatus = btn.dataset.status;
-          setStatus(index, newStatus);
-        });
-      });
-
-      // Einfügen in die richtige Spalte
-      if (task.status === "done") {
-        doneContainer.appendChild(taskElement);
-      } else if (task.status === "inprogress") {
-        inprogressContainer.appendChild(taskElement);
-      } else {
-        todoContainer.appendChild(taskElement);
-      }
+    // Drag Start
+    taskElement.addEventListener("dragstart", e => {
+      e.dataTransfer.setData("text/plain", taskIndex.toString());
     });
 
-  // Drop-Zonen aktivieren
-  setupDropZones();
+    const cat = categories.find(c => c.name === task.category);
+    const catColor = cat ? cat.color : "#666";
+
+    taskElement.innerHTML = `
+      <div class="kanban-text">
+        ${task.text}
+        <span class="badge" style="background:${catColor}">${task.category}</span>
+      </div>
+      <div class="kanban-controls">
+        <button class="status-btn" data-status="todo">📝</button>
+        <button class="status-btn" data-status="inprogress">🔄</button>
+        <button class="status-btn" data-status="done">✅</button>
+      </div>
+    `;
+
+    // Status-Buttons
+    taskElement.querySelectorAll(".status-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const newStatus = btn.dataset.status;
+        setStatus(taskIndex, newStatus);
+      });
+    });
+
+    // In richtige Spalte einfügen
+    if (task.status === "done") {
+      doneContainer.appendChild(taskElement);
+    } else if (task.status === "inprogress") {
+      inprogressContainer.appendChild(taskElement);
+    } else {
+      todoContainer.appendChild(taskElement);
+    }
+  });
+
+  setupDropZones(); // Drop-Zonen neu aktivieren
 }
+
 
 function setupDropZones() {
   const statuses = ["todo", "inprogress", "done"];
@@ -355,7 +365,7 @@ function renderProjectSwitcher() {
     const opt = document.createElement("option");
     opt.value = project;
     opt.textContent = project;
-    if (project === kanbanProject) {
+    if (project === getActiveProject()) {
       opt.selected = true;
     }
     projectSwitcher.appendChild(opt);
@@ -364,7 +374,9 @@ function renderProjectSwitcher() {
 
 projectSwitcher.addEventListener("change", () => {
   localStorage.setItem("activeProject", projectSwitcher.value);
-  location.reload(); // oder renderKanban() neu aufrufen, wenn du kein Reload willst
+  renderKanban();
+  renderTasks();
+  renderProjectSwitcher();
 });
 
 boardTaskForm.addEventListener("submit", (e) => {
@@ -375,7 +387,7 @@ boardTaskForm.addEventListener("submit", (e) => {
     done: boardStatusSelect.value === "done",
     status: boardStatusSelect.value,
     category: boardCategorySelect.value,
-    project: kanbanProject
+    project: getActiveProject()
   };
 
   tasks.push(newTask);
@@ -391,7 +403,6 @@ renderProjectList();
 renderCategoryOptions(); // Kategorie-Dropdown befüllen
 renderCategoryList();    // Kategorieverwaltung anzeigen
 renderTasks();           // Aufgabenliste anzeigen
-renderTasks();
 renderProjectSwitcher();
 renderKanban();
    ["todo", "inprogress", "done"].forEach(status => {
