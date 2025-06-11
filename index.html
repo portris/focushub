@@ -13,7 +13,29 @@
     <button id="theme-toggle" class="theme-toggle">🌙</button>
   </header>
 
+    <section id="kanban-board">
+      <h2>Projektübersicht: <span id="active-project-name"></span></h2>
+
+      <div class="board-columns">
+        <div class="board-column" data-status="todo">
+          <h3>📝 To Do</h3>
+          <div class="column-tasks" id="todo-tasks"></div>
+        </div>
+
+        <div class="board-column" data-status="inprogress">
+          <h3>🔄 In Progress</h3>
+          <div class="column-tasks" id="inprogress-tasks"></div>
+        </div>
+
+        <div class="board-column" data-status="done">
+          <h3>✅ Done</h3>
+          <div class="column-tasks" id="done-tasks"></div>
+        </div>
+      </div>
+    </section>
   <main class="todo-app">
+
+
 <section id="project-manager">
   <h3>Projekte verwalten</h3>
   <form id="project-form">

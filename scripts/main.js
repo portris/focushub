@@ -21,7 +21,7 @@ if (themeToggle) {
   });
 }
 
-// ToDo-Funktionalität
+// ToDo-Funktionalität mit Kanban
 const taskForm = document.getElementById("task-form");
 const taskInput = document.getElementById("task-input");
 const taskList = document.getElementById("task-list");
@@ -38,6 +38,12 @@ const projectForm = document.getElementById("project-form");
 const projectNameInput = document.getElementById("new-project-name");
 const projectList = document.getElementById("project-list");
 const projectSelect = document.getElementById("task-project");
+
+const kanbanProject = localStorage.getItem("activeProject") || "Standardprojekt";
+document.getElementById("active-project-name").textContent = kanbanProject;
+const todoContainer = document.getElementById("todo-tasks");
+const inprogressContainer = document.getElementById("inprogress-tasks");
+const doneContainer = document.getElementById("done-tasks");
 
 
 
@@ -187,24 +193,63 @@ taskForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const category = document.getElementById("task-category").value;
   const project = projectSelect.value;
-  tasks.push({ text: taskInput.value, done: false, category, project });
+  tasks.push({ text: taskInput.value, done: false, status: "todo", category, project });
   taskInput.value = "";
   saveTasks();
   renderTasks();
+  renderKanban();
 });
 
 categoryFilter.addEventListener("change", renderTasks);
 
 window.toggleDone = function(index) {
   tasks[index].done = !tasks[index].done;
+  tasks[index].status = tasks[index].done ? "done" : "todo";
   saveTasks();
   renderTasks();
+  renderKanban();
 };
 
 window.deleteTask = function(index) {
   tasks.splice(index, 1);
   saveTasks();
   renderTasks();
+  renderKanban();
+};
+
+function renderKanban() {
+  todoContainer.innerHTML = "";
+  inprogressContainer.innerHTML = "";
+  doneContainer.innerHTML = "";
+
+  tasks.filter(t => t.project === kanbanProject).forEach((task, index) => {
+    const el = document.createElement("div");
+    el.className = "kanban-task";
+
+        el.innerHTML = `
+        <div class="kanban-text">${task.text}</div>
+        <div class="kanban-controls">
+          <button onclick="setStatus(${index}, 'todo')">📝</button>
+          <button onclick="setStatus(${index}, 'inprogress')">🔄</button>
+          <button onclick="setStatus(${index}, 'done')">✅</button>
+        </div>
+      `;
+
+    if (task.done) {
+      doneContainer.appendChild(el);
+    } else if (task.status === "inprogress") {
+      inprogressContainer.appendChild(el);
+    } else {
+      todoContainer.appendChild(el);
+    }
+  });
+}
+
+window.setStatus = function(index, status) {
+  tasks[index].status = status;
+  tasks[index].done = status === "done"; // optional, falls du "done" noch nutzt
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  renderKanban();
 };
 
 renderProjectOptions();
@@ -213,3 +258,4 @@ renderCategoryOptions(); // Kategorie-Dropdown befüllen
 renderCategoryList();    // Kategorieverwaltung anzeigen
 renderTasks();           // Aufgabenliste anzeigen
 renderTasks();
+renderKanban();
