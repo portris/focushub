@@ -13,6 +13,30 @@
     <button id="theme-toggle" class="theme-toggle">🌙</button>
   </header>
 
+    <section id="kanban-controls">
+      <label for="project-switcher">Projekt wählen:</label>
+      <select id="project-switcher"></select>
+    </section>
+
+    <section id="kanban-task-form">
+      <h3>Neue Aufgabe im Projekt "<span id="form-project-name"></span>"</h3>
+      <form id="board-task-form">
+        <input type="text" id="board-task-input" placeholder="Aufgabenbeschreibung" required />
+    
+        <select id="board-task-category" required>
+          <option value="" disabled selected>Kategorie wählen</option>
+        </select>
+
+        <select id="board-task-status" required>
+          <option value="todo">📝 To Do</option>
+          <option value="inprogress">🔄 In Progress</option>
+          <option value="done">✅ Done</option>
+        </select>
+
+        <button type="submit">➕ Aufgabe hinzufügen</button>
+      </form>
+    </section>
+
     <section id="kanban-board">
       <h2>Projektübersicht: <span id="active-project-name"></span></h2>
 

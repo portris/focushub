@@ -247,3 +247,52 @@ form select {
   cursor: pointer;
   font-size: 1.2rem;
 }
+
+/* Task Bar für Kanban Board */
+#kanban-controls {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+#project-switcher {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* CSS für Tasks direkt im Board hinzufügen */
+
+#kanban-task-form {
+  margin: 2rem 0;
+  padding: 1rem;
+  background: var(--card);
+  border-radius: 8px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+#board-task-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+#board-task-form input,
+#board-task-form select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#board-task-form button {
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

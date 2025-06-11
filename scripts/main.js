@@ -45,6 +45,14 @@ const todoContainer = document.getElementById("todo-tasks");
 const inprogressContainer = document.getElementById("inprogress-tasks");
 const doneContainer = document.getElementById("done-tasks");
 
+const projectSwitcher = document.getElementById("project-switcher");
+
+const formProjectName = document.getElementById("form-project-name");
+const boardTaskForm = document.getElementById("board-task-form");
+const boardTaskInput = document.getElementById("board-task-input");
+const boardCategorySelect = document.getElementById("board-task-category");
+const boardStatusSelect = document.getElementById("board-task-status");
+formProjectName.textContent = kanbanProject;
 
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
@@ -95,6 +103,8 @@ window.removeProject = function(index) {
   renderTasks();
   renderProjectOptions();
   renderProjectList();
+  renderProjectSwitcher();
+  renderKanban();
 };
 
 projectForm.addEventListener("submit", (e) => {
@@ -106,6 +116,8 @@ projectForm.addEventListener("submit", (e) => {
   renderProjectOptions();
   renderProjectList();
   projectForm.reset();
+  renderProjectSwitcher();
+  renderKanban();
 });
 
 function renderCategoryOptions() {
@@ -114,6 +126,8 @@ function renderCategoryOptions() {
 
   // Für den Filter
   categoryFilter.innerHTML = '<option value="Alle">Alle</option>';
+
+  boardCategorySelect.innerHTML = '<option value="" disabled selected>Kategorie wählen</option>';
 
   categories.forEach(cat => {
     const opt1 = document.createElement("option");
@@ -125,6 +139,11 @@ function renderCategoryOptions() {
     opt2.value = cat.name;
     opt2.textContent = cat.name;
     categoryFilter.appendChild(opt2);
+
+    const opt3 = document.createElement("option");
+    opt3.value = cat.name;
+    opt3.textContent = cat.name;
+    boardCategorySelect.appendChild(opt3);
   });
 }
 
@@ -160,6 +179,8 @@ window.removeCategory = function(index) {
   renderCategoryList();
   renderCategoryOptions();
   renderTasks();
+  renderProjectSwitcher();
+  renderKanban();
 };
 
 function renderTasks() {
@@ -198,6 +219,7 @@ taskForm.addEventListener("submit", (e) => {
   saveTasks();
   renderTasks();
   renderKanban();
+  renderProjectSwitcher();
 });
 
 categoryFilter.addEventListener("change", renderTasks);
@@ -208,6 +230,7 @@ window.toggleDone = function(index) {
   saveTasks();
   renderTasks();
   renderKanban();
+  renderProjectSwitcher();
 };
 
 window.deleteTask = function(index) {
@@ -215,6 +238,7 @@ window.deleteTask = function(index) {
   saveTasks();
   renderTasks();
   renderKanban();
+  renderProjectSwitcher();
 };
 
 function renderKanban() {
@@ -252,10 +276,47 @@ window.setStatus = function(index, status) {
   renderKanban();
 };
 
+function renderProjectSwitcher() {
+  projectSwitcher.innerHTML = "";
+
+  projects.forEach(project => {
+    const opt = document.createElement("option");
+    opt.value = project;
+    opt.textContent = project;
+    if (project === kanbanProject) {
+      opt.selected = true;
+    }
+    projectSwitcher.appendChild(opt);
+  });
+}
+
+projectSwitcher.addEventListener("change", () => {
+  localStorage.setItem("activeProject", projectSwitcher.value);
+  location.reload(); // oder renderKanban() neu aufrufen, wenn du kein Reload willst
+});
+
+boardTaskForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const newTask = {
+    text: boardTaskInput.value.trim(),
+    done: boardStatusSelect.value === "done",
+    status: boardStatusSelect.value,
+    category: boardCategorySelect.value,
+    project: kanbanProject
+  };
+
+  tasks.push(newTask);
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  boardTaskForm.reset();
+  renderKanban();
+});
+
 renderProjectOptions();
 renderProjectList();
 renderCategoryOptions(); // Kategorie-Dropdown befüllen
 renderCategoryList();    // Kategorieverwaltung anzeigen
 renderTasks();           // Aufgabenliste anzeigen
 renderTasks();
+renderProjectSwitcher();
 renderKanban();
