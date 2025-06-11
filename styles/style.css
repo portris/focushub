@@ -1,7 +1,7 @@
 :root {
   --bg: #f5f5f5;
   --text: #111;
-  --accent: #2d8150;
+  --accent: #73ac8b;
   --card: white;
   --column: rgb(196, 223, 193);
 }
@@ -29,6 +29,7 @@ body {
   font-family: system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
+  transition: background-color 0.3s ease;
 }
 
 header, footer {
@@ -262,6 +263,8 @@ form select {
 }
 
 
+
+
 .kanban-task:active {
   cursor: grabbing;
   transform: scale(1.01);
@@ -401,4 +404,49 @@ main {
   text-align: center;
   font-size: 1.1rem;
   margin-bottom: 1rem;
+}
+
+/* Animationen */
+.kanban-task {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.kanban-task.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.admin-form {
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.admin-form.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Admin Forms in den FLow einbetten */
+.todo-app-admin {
+  position: relative;
+  z-index: 10;
+}
+
+
+
+main.todo-app {
+  position: relative;
+  z-index: 1;
+}
+
+
+.todo-app-admin {
+  z-index: 10;
+  position: relative;
 }

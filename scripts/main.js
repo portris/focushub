@@ -63,10 +63,16 @@ const formSections = {
 };
 
 adminSwitcher.addEventListener("change", () => {
-  Object.values(formSections).forEach(div => div.classList.remove("active"));
+  Object.values(formSections).forEach(div => {
+    div.style.maxHeight = "0px";
+    div.classList.remove("active");
+  });
+
   const val = adminSwitcher.value;
-  if (formSections[val]) {
-    formSections[val].classList.add("active");
+  const selected = formSections[val];
+  if (selected) {
+    selected.classList.add("active");
+    selected.style.maxHeight = selected.scrollHeight + "px";
   }
 });
 
@@ -301,13 +307,17 @@ function renderKanban() {
     });
 
     // In richtige Spalte einfügen
-    if (task.status === "done") {
-      doneContainer.appendChild(taskElement);
-    } else if (task.status === "inprogress") {
-      inprogressContainer.appendChild(taskElement);
-    } else {
-      todoContainer.appendChild(taskElement);
-    }
+const targetContainer =
+  task.status === "done" ? doneContainer :
+  task.status === "inprogress" ? inprogressContainer :
+  todoContainer;
+
+targetContainer.appendChild(taskElement);
+
+// Kleine Verzögerung, damit CSS-Transition greift
+requestAnimationFrame(() => {
+  taskElement.classList.add("show");
+});
   });
 
   setupDropZones(); // Drop-Zonen neu aktivieren
