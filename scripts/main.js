@@ -69,6 +69,10 @@ adminSwitcher.addEventListener("change", () => {
   }
 });
 
+function getActiveProject() {
+  return localStorage.getItem("activeProject") || "Standardprojekt";
+}
+
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let categories = JSON.parse(localStorage.getItem("categories")) || [
@@ -253,27 +257,47 @@ function renderKanban() {
   inprogressContainer.innerHTML = "";
   doneContainer.innerHTML = "";
 
-  tasks.filter(t => t.project === kanbanProject).forEach((task, index) => {
-    const el = document.createElement("div");
-    el.className = "kanban-task";
+  tasks
+    .filter(task => task.project === getActiveProject())
+    .forEach((task, index) => {
+      const el = document.createElement("div");
+      el.className = "kanban-task";
+      el.setAttribute("draggable", true);
+      el.dataset.index = index;
 
-        el.innerHTML = `
+      el.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("text/plain", e.target.dataset.index);
+      });
+
+      el.innerHTML = `
         <div class="kanban-text">${task.text}</div>
         <div class="kanban-controls">
-          <button onclick="setStatus(${index}, 'todo')">📝</button>
-          <button onclick="setStatus(${index}, 'inprogress')">🔄</button>
-          <button onclick="setStatus(${index}, 'done')">✅</button>
+          <button class="status-btn" data-index="${index}" data-status="todo">📝</button>
+          <button class="status-btn" data-index="${index}" data-status="inprogress">🔄</button>
+          <button class="status-btn" data-index="${index}" data-status="done">✅</button>
         </div>
       `;
 
-    if (task.status === "done") {
-      doneContainer.appendChild(el);
-    } else if (task.status === "inprogress") {
-      inprogressContainer.appendChild(el);
-    } else {
-      todoContainer.appendChild(el);
-    }
-  });
+      // Button-Events direkt binden
+      el.querySelectorAll(".status-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const idx = parseInt(btn.dataset.index);
+          const newStatus = btn.dataset.status;
+          setStatus(idx, newStatus);
+        });
+      });
+
+      // In die richtige Spalte einfügen
+      if (task.status === "done") {
+        doneContainer.appendChild(el);
+      } else if (task.status === "inprogress") {
+        inprogressContainer.appendChild(el);
+      } else {
+        todoContainer.appendChild(el);
+      }
+    });
+
+  setupDropZones();
 }
 
 window.setStatus = function(index, status) {
@@ -330,3 +354,25 @@ renderTasks();           // Aufgabenliste anzeigen
 renderTasks();
 renderProjectSwitcher();
 renderKanban();
+   ["todo", "inprogress", "done"].forEach(status => {
+  const column = document.querySelector(`.board-column[data-status="${status}"]`);
+
+  column.addEventListener("dragover", e => {
+    e.preventDefault();
+    column.classList.add("drag-over");
+  });
+
+  column.addEventListener("dragleave", () => {
+    column.classList.remove("drag-over");
+  });
+
+  column.addEventListener("drop", e => {
+    e.preventDefault();
+    column.classList.remove("drag-over");
+
+    const taskIndex = e.dataTransfer.getData("text/plain");
+    tasks[taskIndex].status = status;
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    renderKanban();
+  });
+});
