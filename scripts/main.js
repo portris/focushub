@@ -54,6 +54,21 @@ const boardCategorySelect = document.getElementById("board-task-category");
 const boardStatusSelect = document.getElementById("board-task-status");
 formProjectName.textContent = kanbanProject;
 
+const adminSwitcher = document.getElementById("admin-switcher");
+const formSections = {
+  task: document.getElementById("task-form-section"),
+  category: document.getElementById("category-form-section"),
+  project: document.getElementById("project-form-section")
+};
+
+adminSwitcher.addEventListener("change", () => {
+  Object.values(formSections).forEach(div => div.classList.remove("active"));
+  const val = adminSwitcher.value;
+  if (formSections[val]) {
+    formSections[val].classList.add("active");
+  }
+});
+
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let categories = JSON.parse(localStorage.getItem("categories")) || [
@@ -195,14 +210,15 @@ function renderTasks() {
       const projectName = task.project ? `<em>(${task.project})</em>` : "";
 
       const li = document.createElement("li");
-      li.className = task.done ? "done" : "";
+      if (task.status === "done") {
+        li.style.opacity = 0.6;
+      }
       li.innerHTML = `
         <div class="task-text">
           <span class="task-label">${task.text} ${projectName}</span>
           <span class="badge" style="background:${color}">${task.category}</span>
         </div>
         <div class="task-actions">
-          <button onclick="toggleDone(${index})" class="action-btn check"><i class="fas fa-check"></i></button>
           <button onclick="deleteTask(${index})" class="action-btn delete"><i class="fas fa-trash"></i></button>
         </div>
       `;
@@ -223,15 +239,6 @@ taskForm.addEventListener("submit", (e) => {
 });
 
 categoryFilter.addEventListener("change", renderTasks);
-
-window.toggleDone = function(index) {
-  tasks[index].done = !tasks[index].done;
-  tasks[index].status = tasks[index].done ? "done" : "todo";
-  saveTasks();
-  renderTasks();
-  renderKanban();
-  renderProjectSwitcher();
-};
 
 window.deleteTask = function(index) {
   tasks.splice(index, 1);
@@ -273,7 +280,9 @@ window.setStatus = function(index, status) {
   tasks[index].status = status;
   tasks[index].done = status === "done"; // optional, falls du "done" noch nutzt
   localStorage.setItem("tasks", JSON.stringify(tasks));
+  renderTasks();
   renderKanban();
+  renderProjectSwitcher();
 };
 
 function renderProjectSwitcher() {
@@ -309,7 +318,9 @@ boardTaskForm.addEventListener("submit", (e) => {
   tasks.push(newTask);
   localStorage.setItem("tasks", JSON.stringify(tasks));
   boardTaskForm.reset();
+  renderTasks();
   renderKanban();
+  renderProjectSwitcher();
 });
 
 renderProjectOptions();

@@ -296,3 +296,29 @@ form select {
   border-radius: 6px;
   cursor: pointer;
 }
+
+/* Taskbar umschalten */
+
+#admin-toolbar {
+  text-align: center;
+  margin: 1rem auto;
+}
+
+#admin-toolbar select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+}
+
+#admin-forms {
+  margin-top: 1rem;
+}
+
+.admin-form {
+  display: none;
+}
+
+.admin-form.active {
+  display: block;
+}
+

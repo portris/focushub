@@ -13,6 +13,51 @@
     <button id="theme-toggle" class="theme-toggle">🌙</button>
   </header>
 
+  <nav id="admin-toolbar">
+  <select id="admin-switcher">
+    <option value="">-- Verwaltung öffnen --</option>
+    <option value="task">📝 Aufgabe hinzufügen</option>
+    <option value="category">🏷 Kategorien verwalten</option>
+    <option value="project">📁 Projekte verwalten</option>
+  </select>
+</nav>
+
+<section id="admin-forms">
+  <div class="admin-form" id="task-form-section">
+    <form id="task-form">
+      <input type="text" id="task-input" placeholder="Neue Aufgabe..." required />
+      <select id="task-category">
+      </select>
+      <select id="task-project" required>
+        <option value="" disabled selected>Projekt wählen</option>
+      </select>
+      <button type="submit"><i class="fas fa-plus"></i></button>
+    </form>
+    <ul id="task-list"></ul>
+  </div>
+  <div class="admin-form" id="category-form-section">
+    <section id="category-manager">
+        <h3>Kategorien verwalten</h3>
+        <form id="category-form">
+            <input type="text" id="new-category-name" placeholder="Neue Kategorie" required />
+             <input type="color" id="new-category-color" value="#6c757d" />
+             <button type="submit">➕ Hinzufügen</button>
+        </form>
+        <ul id="category-list"></ul>
+    </section>
+  </div>
+  <div class="admin-form" id="project-form-section">
+    <section id="project-manager">
+      <h3>Projekte verwalten</h3>
+      <form id="project-form">
+        <input type="text" id="new-project-name" placeholder="Neues Projekt" required />
+        <button type="submit">➕ Hinzufügen</button>
+      </form>
+      <ul id="project-list"></ul>
+</section>
+  </div>
+</section>
+
     <section id="kanban-controls">
       <label for="project-switcher">Projekt wählen:</label>
       <select id="project-switcher"></select>
