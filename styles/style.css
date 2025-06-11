@@ -3,7 +3,7 @@
   --text: #111;
   --accent: #2d8150;
   --card: white;
-  --column: white;
+  --column: rgb(196, 223, 193);
 }
 
 body.dark {
@@ -261,6 +261,19 @@ form select {
   box-shadow: 0 0 4px rgba(0,0,0,0.1);
 }
 
+
+.kanban-task:active {
+  cursor: grabbing;
+  transform: scale(1.01);
+}
+
+/* Drag-Ziel-Hervorhebung */
+.drag-over {
+  background: rgba(0, 128, 0, 0.1);
+  outline: 2px dashed #2d8150;
+  outline-offset: -10px;
+}
+
 .kanban-controls {
   margin-top: 0.5rem;
   display: flex;
@@ -362,3 +375,29 @@ main {
   width: 100%;
 }
 
+/* Buttons in Tasks */
+.kanban-controls {
+  margin-top: 0.5rem;
+  display: flex;
+}
+
+.kanban-controls button {
+  background: var(--column);
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.kanban-controls button:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* Column-Titel */
+.board-column h3 {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}

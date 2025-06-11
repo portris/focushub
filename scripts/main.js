@@ -257,47 +257,87 @@ function renderKanban() {
   inprogressContainer.innerHTML = "";
   doneContainer.innerHTML = "";
 
-  tasks
-    .filter(task => task.project === getActiveProject())
-    .forEach((task, index) => {
-      const el = document.createElement("div");
-      el.className = "kanban-task";
-      el.setAttribute("draggable", true);
-      el.dataset.index = index;
+  const activeProject = getActiveProject();
 
-      el.addEventListener("dragstart", e => {
-        e.dataTransfer.setData("text/plain", e.target.dataset.index);
+  tasks
+    .filter(task => task.project === activeProject)
+    .forEach((task, index) => {
+      const taskElement = document.createElement("div");
+      taskElement.className = "kanban-task";
+      taskElement.setAttribute("draggable", "true");
+      taskElement.dataset.index = index;
+
+      // Drag Start
+      taskElement.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("text/plain", index.toString());
       });
 
-      el.innerHTML = `
+      // Inneres HTML mit Status-Buttons
+      taskElement.innerHTML = `
         <div class="kanban-text">${task.text}</div>
         <div class="kanban-controls">
-          <button class="status-btn" data-index="${index}" data-status="todo">📝</button>
-          <button class="status-btn" data-index="${index}" data-status="inprogress">🔄</button>
-          <button class="status-btn" data-index="${index}" data-status="done">✅</button>
+          <button class="status-btn" data-status="todo">📝</button>
+          <button class="status-btn" data-status="inprogress">🔄</button>
+          <button class="status-btn" data-status="done">✅</button>
         </div>
       `;
 
-      // Button-Events direkt binden
-      el.querySelectorAll(".status-btn").forEach(btn => {
+      // Status-Buttons funktionieren korrekt
+      taskElement.querySelectorAll(".status-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-          const idx = parseInt(btn.dataset.index);
           const newStatus = btn.dataset.status;
-          setStatus(idx, newStatus);
+          setStatus(index, newStatus);
         });
       });
 
-      // In die richtige Spalte einfügen
+      // Einfügen in die richtige Spalte
       if (task.status === "done") {
-        doneContainer.appendChild(el);
+        doneContainer.appendChild(taskElement);
       } else if (task.status === "inprogress") {
-        inprogressContainer.appendChild(el);
+        inprogressContainer.appendChild(taskElement);
       } else {
-        todoContainer.appendChild(el);
+        todoContainer.appendChild(taskElement);
       }
     });
 
+  // Drop-Zonen aktivieren
   setupDropZones();
+}
+
+function setupDropZones() {
+  const statuses = ["todo", "inprogress", "done"];
+
+  statuses.forEach(status => {
+    const dropZone = document.getElementById(`${status}-tasks`);
+    if (!dropZone) return;
+
+    dropZone.ondragover = e => {
+      e.preventDefault();
+      dropZone.classList.add("drag-over");
+    };
+
+    dropZone.ondragleave = () => {
+      dropZone.classList.remove("drag-over");
+    };
+
+    dropZone.ondrop = e => {
+      e.preventDefault();
+      dropZone.classList.remove("drag-over");
+
+      const taskIndex = parseInt(e.dataTransfer.getData("text/plain"));
+      if (!isNaN(taskIndex)) {
+        tasks[taskIndex].status = status;
+        saveTasks();
+        renderKanban();
+      }
+    };
+  });
+}
+
+function setStatus(index, status) {
+  tasks[index].status = status;
+  saveTasks();
+  renderKanban();
 }
 
 window.setStatus = function(index, status) {
