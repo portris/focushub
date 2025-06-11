@@ -3,12 +3,14 @@
   --text: #111;
   --accent: #2d8150;
   --card: white;
+  --column: white;
 }
 
 body.dark {
   --bg: #121212;
   --text: #f5f5f5;
   --card: #1e1e1e;
+  --column: #4b5c52;
 }
 /* Darkmode Styles für Formulare */
 body.dark input,
@@ -47,9 +49,22 @@ header, footer {
 }
 
 .todo-app {
-  max-width: auto;
+  max-width: 95%;
   margin: 2rem auto;
   padding: 1rem;
+  flex: 1;
+  width: 100%;
+  background: var(--card);
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+}
+
+.todo-app-admin {
+  max-width: 95%;
+  margin: 2rem auto;
+  padding: 1rem;
+  height: 100%;
+  flex: 1;
   background: var(--card);
   border-radius: 8px;
   box-shadow: 0 0 12px rgba(0,0,0,0.1);
@@ -225,6 +240,7 @@ form select {
   flex: 1 1 30%;
   background: var(--card);
   padding: 1rem;
+  background-color: var(--column);
   border-radius: 8px;
   min-height: 300px;
   box-shadow: 0 0 6px rgba(0,0,0,0.05);
@@ -331,5 +347,18 @@ form select {
 
 .admin-form.active {
   display: block;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  width: 100%;
 }
 

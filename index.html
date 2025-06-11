@@ -12,7 +12,8 @@
     <h1>📝 FocusHub – Aufgaben</h1>
     <button id="theme-toggle" class="theme-toggle">🌙</button>
   </header>
-<main class="todo-app">
+<section class="todo-app-admin">
+
   <nav id="admin-toolbar">
   <select id="admin-switcher">
     <option value="">-- Verwaltung öffnen --</option>
@@ -21,7 +22,6 @@
     <option value="project">📁 Projekte verwalten</option>
   </select>
 </nav>
-
 <section id="admin-forms">
   <div class="admin-form" id="task-form-section">
     <section id="filter-section">
@@ -64,7 +64,8 @@
 </section>
   </div>
 </section>
-
+</section>
+  <main class="todo-app">
     <section id="kanban-controls">
       <label for="project-switcher">Projekt wählen:</label>
       <select id="project-switcher"></select>
@@ -110,7 +111,7 @@
         </div>
       </div>
     </section>
-      </main>
+  </main>
 
   <footer>
     <p>&copy; <span id="year"></span> FocusHub by Richard Franken</p>
