@@ -12,11 +12,11 @@
     <h1>📝 FocusHub – Aufgaben</h1>
     <button id="theme-toggle" class="theme-toggle">🌙</button>
   </header>
-
+<main class="todo-app">
   <nav id="admin-toolbar">
   <select id="admin-switcher">
     <option value="">-- Verwaltung öffnen --</option>
-    <option value="task">📝 Aufgabe hinzufügen</option>
+    <option value="task">📝 Aufgaben verwalten</option>
     <option value="category">🏷 Kategorien verwalten</option>
     <option value="project">📁 Projekte verwalten</option>
   </select>
@@ -24,6 +24,13 @@
 
 <section id="admin-forms">
   <div class="admin-form" id="task-form-section">
+    <section id="filter-section">
+      <label for="category-filter">Kategorie filtern:</label>
+      <select id="category-filter">
+        <option value="Alle">Alle</option>
+        <!-- Weitere Optionen werden per JS ergänzt -->
+      </select>
+    </section>
     <form id="task-form">
       <input type="text" id="task-input" placeholder="Neue Aufgabe..." required />
       <select id="task-category">
@@ -57,11 +64,13 @@
 </section>
   </div>
 </section>
+  </main>
 
     <section id="kanban-controls">
       <label for="project-switcher">Projekt wählen:</label>
       <select id="project-switcher"></select>
     </section>
+
 
     <section id="kanban-task-form">
       <h3>Neue Aufgabe im Projekt "<span id="form-project-name"></span>"</h3>
@@ -102,47 +111,6 @@
         </div>
       </div>
     </section>
-  <main class="todo-app">
-
-
-<section id="project-manager">
-  <h3>Projekte verwalten</h3>
-  <form id="project-form">
-    <input type="text" id="new-project-name" placeholder="Neues Projekt" required />
-    <button type="submit">➕ Hinzufügen</button>
-  </form>
-  <ul id="project-list"></ul>
-</section>
-
-    <section id="filter-section">
-  <label for="category-filter">Kategorie filtern:</label>
-  <select id="category-filter">
-    <option value="Alle">Alle</option>
-    <!-- Weitere Optionen werden per JS ergänzt -->
-  </select>
-</section>
-
-    <form id="task-form">
-      <input type="text" id="task-input" placeholder="Neue Aufgabe..." required />
-      <select id="task-category">
-      </select>
-      <select id="task-project" required>
-  <option value="" disabled selected>Projekt wählen</option>
-</select>
-      <button type="submit"><i class="fas fa-plus"></i></button>
-    </form>
-    <ul id="task-list"></ul>
-
-    <section id="category-manager">
-        <h3>Kategorien verwalten</h3>
-        <form id="category-form">
-            <input type="text" id="new-category-name" placeholder="Neue Kategorie" required />
-             <input type="color" id="new-category-color" value="#6c757d" />
-             <button type="submit">➕ Hinzufügen</button>
-        </form>
-        <ul id="category-list"></ul>
-    </section>
-  </main>
 
   <footer>
     <p>&copy; <span id="year"></span> FocusHub by Richard Franken</p>

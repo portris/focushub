@@ -230,7 +230,7 @@ taskForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const category = document.getElementById("task-category").value;
   const project = projectSelect.value;
-  tasks.push({ text: taskInput.value, done: false, status: "todo", category, project });
+  tasks.push({ text: taskInput.value, status: "todo", category, project });
   taskInput.value = "";
   saveTasks();
   renderTasks();
@@ -266,7 +266,7 @@ function renderKanban() {
         </div>
       `;
 
-    if (task.done) {
+    if (task.status === "done") {
       doneContainer.appendChild(el);
     } else if (task.status === "inprogress") {
       inprogressContainer.appendChild(el);
@@ -278,7 +278,6 @@ function renderKanban() {
 
 window.setStatus = function(index, status) {
   tasks[index].status = status;
-  tasks[index].done = status === "done"; // optional, falls du "done" noch nutzt
   localStorage.setItem("tasks", JSON.stringify(tasks));
   renderTasks();
   renderKanban();
