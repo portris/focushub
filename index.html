@@ -10,22 +10,29 @@
 
 <body>
   <!-- HEADER -->
-  <header>
-    <h1>📝 FocusHub – Aufgaben</h1>
-    <button id="theme-toggle" class="theme-toggle">🌙</button>
-  </header>
+<header class="app-header">
+  <div class="header-left">
+    <img href="https://storyset.com/people" src="assets/images/Mental health-bro.svg" alt="FocusHub Logo" class="logo" />
+    <div class="title-group">
+      <h1>FocusHub</h1>
+      <p class="subtitle">Deine smarte Aufgabenverwaltung</p>
+    </div>
+  </div>
+    <nav class="mini-nav">
+    <button class="nav-btn" data-target="board" title="Zum Board">📋 Board</button>
+    <button class="nav-btn" data-target="task" title="Aufgaben verwalten">📝 Tasks</button>
+    <button class="nav-btn" data-target="category" title="Kategorien verwalten">🏷 Kategorien</button>
+    <button class="nav-btn" data-target="project" title="Projekte verwalten">📁 Projekte</button>
+  </nav>
+  <div class="header-right">
+    <span class="project-indicator">📁 <span id="header-project-name">Kein Projekt</span></span>
+    <button id="theme-toggle" class="theme-toggle" title="Theme wechseln">🌙</button>
+    <button class="user-icon" title="Demnächst: Profil">👤</button>
+  </div>
+  
+</header>
 
   <!-- ADMIN-BEREICH: Dropdown + Eingabeformulare -->
-  <section class="todo-app-admin">
-    <nav id="admin-toolbar">
-      <select id="admin-switcher">
-        <option value="">-- Verwaltung öffnen --</option>
-        <option value="task">📝 Aufgaben verwalten</option>
-        <option value="category">🏷 Kategorien verwalten</option>
-        <option value="project">📁 Projekte verwalten</option>
-      </select>
-    </nav>
-    
     <div id="admin-scroll-wrapper">
     <section id="admin-forms">
 
@@ -34,6 +41,11 @@
         <section id="filter-section">
           <label for="category-filter">Kategorie filtern:</label>
           <select id="category-filter">
+            <option value="Alle">Alle</option>
+            <!-- Weitere Optionen werden per JS ergänzt -->
+          </select>
+          <label for="project-filter">Projekt filtern:</label>
+          <select id="project-filter">
             <option value="Alle">Alle</option>
             <!-- Weitere Optionen werden per JS ergänzt -->
           </select>
@@ -78,7 +90,6 @@
       </div>
     </section>
     </div>
-  </section>
 
   <!-- KANBAN BOARD + TASK ERSTELLUNG -->
   <main class="todo-app">

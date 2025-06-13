@@ -38,6 +38,7 @@ const projectForm = document.getElementById("project-form");
 const projectNameInput = document.getElementById("new-project-name");
 const projectList = document.getElementById("project-list");
 const projectSelect = document.getElementById("task-project");
+const projectFilter = document.getElementById("project-filter");
 
 const todoContainer = document.getElementById("todo-tasks");
 const inprogressContainer = document.getElementById("inprogress-tasks");
@@ -74,19 +75,19 @@ function getActiveProject() {
 // ==============================
 // Event-Handler
 // ==============================
-adminSwitcher.addEventListener("change", () => {
+function activateAdminForm(target) {
   Object.values(formSections).forEach(div => {
-    div.style.maxHeight = "0px";
     div.classList.remove("active");
+    div.style.maxHeight = "0px";
   });
 
-  const val = adminSwitcher.value;
-  const selected = formSections[val];
+  const selected = formSections[target];
   if (selected) {
     selected.classList.add("active");
     selected.style.maxHeight = selected.scrollHeight + "px";
+    window.scrollTo({ top: document.querySelector(".todo-app-admin").offsetTop, behavior: "smooth" });
   }
-});
+}
 
 categoryForm.addEventListener("submit", e => {
   e.preventDefault();
@@ -101,6 +102,7 @@ categoryForm.addEventListener("submit", e => {
 });
 
 categoryFilter.addEventListener("change", renderTasks);
+projectFilter.addEventListener("change", renderTasks);
 
 projectForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -194,6 +196,16 @@ function renderCategoryOptions() {
   });
 }
 
+function renderProjectFilterOptions() {
+  projectFilter.innerHTML = '<option value="Alle">Alle</option>';
+  projects.forEach(name => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    projectFilter.appendChild(opt);
+  });
+}
+
 function renderCategoryList() {
   categoryList.innerHTML = "";
   categories.forEach((cat, index) => {
@@ -245,9 +257,12 @@ function renderProjectSwitcher() {
 function renderTasks() {
   taskList.innerHTML = "";
   const selectedCategory = categoryFilter.value;
+  const selectedProject = projectFilter.value;
 
   tasks
-    .filter(task => selectedCategory === "Alle" || task.category === selectedCategory)
+    .filter(task => (selectedCategory === "Alle" || task.category === selectedCategory) &&
+      (selectedProject === "Alle" || task.project === selectedProject)
+    )
     .forEach((task, index) => {
       const cat = categories.find(c => c.name === task.category);
       const color = cat ? cat.color : "#666";
@@ -280,7 +295,7 @@ function renderKanban() {
   // Projektname im UI aktualisieren
   document.getElementById("active-project-name").textContent = activeProject;
   document.getElementById("form-project-name").textContent = activeProject;
-
+  document.getElementById("header-project-name").textContent = activeProject;
   tasks.forEach((task, taskIndex) => {
     if (task.project !== activeProject) return;
 
@@ -419,12 +434,25 @@ window.setStatus = function(index, status) {
   renderProjectSwitcher();
 };
 
+
+document.querySelectorAll(".nav-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const target = btn.dataset.target;
+    if (target === "board") {
+      window.scrollTo({ top: document.querySelector("main").offsetTop, behavior: "smooth" });
+    } else {
+      activateAdminForm(target);
+    }
+  });
+});
+
 // ==============================
 // Initialisierung
 // ==============================
 renderProjectOptions();
 renderProjectList();
 renderCategoryOptions(); // Kategorie-Dropdown befüllen
+renderProjectFilterOptions();
 renderCategoryList();    // Kategorieverwaltung anzeigen
 renderTasks();           // Aufgabenliste anzeigen
 renderProjectSwitcher();
