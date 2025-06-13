@@ -396,6 +396,11 @@ ul#task-list li.done {
   cursor: pointer;
 }
 
+#board-task-form button:hover {
+  
+  transform: scale(1.1);
+}
+
 /* Taskbar umschalten */
 
 #admin-forms {
