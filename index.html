@@ -7,71 +7,88 @@
   <link rel="stylesheet" href="styles/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
+
 <body>
+  <!-- HEADER -->
   <header>
     <h1>📝 FocusHub – Aufgaben</h1>
     <button id="theme-toggle" class="theme-toggle">🌙</button>
   </header>
-<section class="todo-app-admin">
 
-  <nav id="admin-toolbar">
-  <select id="admin-switcher">
-    <option value="">-- Verwaltung öffnen --</option>
-    <option value="task">📝 Aufgaben verwalten</option>
-    <option value="category">🏷 Kategorien verwalten</option>
-    <option value="project">📁 Projekte verwalten</option>
-  </select>
-</nav>
-<section id="admin-forms">
-  <div class="admin-form" id="task-form-section">
-    <section id="filter-section">
-      <label for="category-filter">Kategorie filtern:</label>
-      <select id="category-filter">
-        <option value="Alle">Alle</option>
-        <!-- Weitere Optionen werden per JS ergänzt -->
+  <!-- ADMIN-BEREICH: Dropdown + Eingabeformulare -->
+  <section class="todo-app-admin">
+    <nav id="admin-toolbar">
+      <select id="admin-switcher">
+        <option value="">-- Verwaltung öffnen --</option>
+        <option value="task">📝 Aufgaben verwalten</option>
+        <option value="category">🏷 Kategorien verwalten</option>
+        <option value="project">📁 Projekte verwalten</option>
       </select>
-    </section>
-    <form id="task-form">
-      <input type="text" id="task-input" placeholder="Neue Aufgabe..." required />
-      <select id="task-category">
-      </select>
-      <select id="task-project" required>
-        <option value="" disabled selected>Projekt wählen</option>
-      </select>
-      <button type="submit"><i class="fas fa-plus"></i></button>
-    </form>
-    <ul id="task-list"></ul>
-  </div>
-  <div class="admin-form" id="category-form-section">
-    <section id="category-manager">
-        <h3>Kategorien verwalten</h3>
-        <form id="category-form">
-            <input type="text" id="new-category-name" placeholder="Neue Kategorie" required />
-             <input type="color" id="new-category-color" value="#6c757d" />
-             <button type="submit"><i class="fas fa-plus"></i></button>
+    </nav>
+    
+    <div id="admin-scroll-wrapper">
+    <section id="admin-forms">
+
+      <!-- Aufgabenformular -->
+      <div class="admin-form" id="task-form-section">
+        <section id="filter-section">
+          <label for="category-filter">Kategorie filtern:</label>
+          <select id="category-filter">
+            <option value="Alle">Alle</option>
+            <!-- Weitere Optionen werden per JS ergänzt -->
+          </select>
+        </section>
+
+        <form id="task-form">
+          <input type="text" id="task-input" placeholder="Neue Aufgabe..." required />
+          <select id="task-category">
+          </select>
+          <select id="task-project" required>
+            <option value="" disabled selected>Projekt wählen</option>
+          </select>
+          <button type="submit"><i class="fas fa-plus"></i></button>
         </form>
-        <ul id="category-list"></ul>
+
+        <ul id="task-list"></ul>
+      
+      <!-- Kategorienformular -->
+      </div>
+      <div class="admin-form" id="category-form-section">
+        <section id="category-manager">
+          <h3>Kategorien verwalten</h3>
+          <form id="category-form">
+            <input type="text" id="new-category-name" placeholder="Neue Kategorie" required />
+            <input type="color" id="new-category-color" value="#6c757d" />
+            <button type="submit"><i class="fas fa-plus"></i></button>
+          </form>
+          <ul id="category-list"></ul>
+        </section>
+      </div>
+
+      <!-- Projektformular -->
+      <div class="admin-form" id="project-form-section">
+        <section id="project-manager">
+          <h3>Projekte verwalten</h3>
+          <form id="project-form">
+            <input type="text" id="new-project-name" placeholder="Neues Projekt" required />
+            <button type="submit"><i class="fas fa-plus"></i></button>
+          </form>
+          <ul id="project-list"></ul>
+        </section>
+      </div>
     </section>
-  </div>
-  <div class="admin-form" id="project-form-section">
-    <section id="project-manager">
-      <h3>Projekte verwalten</h3>
-      <form id="project-form">
-        <input type="text" id="new-project-name" placeholder="Neues Projekt" required />
-        <button type="submit"><i class="fas fa-plus"></i></button>
-      </form>
-      <ul id="project-list"></ul>
-</section>
-  </div>
-</section>
-</section>
+    </div>
+  </section>
+
+  <!-- KANBAN BOARD + TASK ERSTELLUNG -->
   <main class="todo-app">
+    <!-- Projektwechsel Dropdown -->
     <section id="kanban-controls">
       <label for="project-switcher">Projekt wählen:</label>
       <select id="project-switcher"></select>
     </section>
 
-
+    <!-- Formular für neue Aufgaben direkt im Board -->
     <section id="kanban-task-form">
       <h3>Neue Aufgabe im Projekt "<span id="form-project-name"></span>"</h3>
       <form id="board-task-form">
@@ -91,9 +108,9 @@
       </form>
     </section>
 
+    <!-- Kanban Board Ansicht -->
     <section id="kanban-board">
       <h2>Projektübersicht: <span id="active-project-name"></span></h2>
-
       <div class="board-columns">
         <div class="board-column" data-status="todo">
           <h3>📝 To Do</h3>
@@ -113,10 +130,12 @@
     </section>
   </main>
 
+   <!-- FOOTER -->
   <footer>
     <p>&copy; <span id="year"></span> FocusHub by Richard Franken</p>
   </footer>
 
+  <!-- JavaScript -->
   <script src="scripts/main.js"></script>
 </body>
 </html>
