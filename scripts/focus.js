@@ -32,7 +32,7 @@ const resetBtn = document.getElementById("reset-btn");
 const sessionButtons = document.querySelectorAll(".session-types button");
 
 const times = {
-  focus: 0.5 * 60,
+  focus: 25 * 60,
   short: 5 * 60,
   long:  15 * 60
 };
