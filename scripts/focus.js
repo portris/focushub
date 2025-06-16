@@ -32,7 +32,7 @@ const resetBtn = document.getElementById("reset-btn");
 const sessionButtons = document.querySelectorAll(".session-types button");
 
 const times = {
-  focus: 25 * 60,
+  focus: 0.5 * 60,
   short: 5 * 60,
   long:  15 * 60
 };
@@ -65,6 +65,7 @@ function updateSessionStatus(type) {
 }
 
 function switchSession(type) {
+  playNotificationSound();
   currentSession = type;
   secondsLeft = times[type];
   updateDisplay();
@@ -112,6 +113,15 @@ function pauseTimer() {
 function resetTimer() {
   pauseTimer();
   switchSession(currentSession);
+}
+
+// Notification Sound für Benachrichtigugn bei Timerende
+function playNotificationSound() {
+  const audio = document.getElementById("notification-sound");
+  if (audio) {
+    audio.currentTime = 0;
+    audio.play();
+  }
 }
 
 // Buttons für Session-Wechsel manuell
