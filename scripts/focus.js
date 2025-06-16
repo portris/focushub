@@ -31,6 +31,9 @@ const pauseBtn = document.getElementById("pause-btn");
 const resetBtn = document.getElementById("reset-btn");
 const sessionButtons = document.querySelectorAll(".session-types button");
 
+const burgerToggle = document.getElementById("burger-toggle");
+const burgerNav = document.getElementById("burger-nav");
+
 const times = {
   focus: 25 * 60,
   short: 5 * 60,
@@ -139,6 +142,10 @@ sessionButtons.forEach(btn => {
 startBtn.addEventListener("click", startTimer);
 pauseBtn.addEventListener("click", pauseTimer);
 resetBtn.addEventListener("click", resetTimer);
+
+burgerToggle.addEventListener("click", () => {
+  burgerNav.classList.toggle("show");
+});
 
 // Initialanzeige setzen
 updateDisplay();
