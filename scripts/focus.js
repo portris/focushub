@@ -19,8 +19,10 @@ if (themeToggle) {
 }
 
 let timer;
+let secondsLeft = 1500; // 25 min default
 let isRunning = false;
-let remainingTime = 25 * 60;
+let cycleCount = 0;
+let currentSession = "focus";
 
 // Elemente holen
 const display = document.getElementById("timer-display");
@@ -29,27 +31,73 @@ const pauseBtn = document.getElementById("pause-btn");
 const resetBtn = document.getElementById("reset-btn");
 const sessionButtons = document.querySelectorAll(".session-types button");
 
+const times = {
+  focus: 25 * 60,
+  short: 5 * 60,
+  long:  15 * 60
+};
+
 // Zeit aktualisieren
 function updateDisplay() {
-  const minutes = Math.floor(remainingTime / 60)
-    .toString()
-    .padStart(2, "0");
-  const seconds = (remainingTime % 60).toString().padStart(2, "0");
-  display.textContent = `${minutes}:${seconds}`;
+  const minutes = Math.floor(secondsLeft / 60);
+  const seconds = secondsLeft % 60;
+  display.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
+
+function updateCycleDisplay() {
+  const indicator = document.getElementById("cycle-indicator");
+  indicator.textContent = `Pomodoro-Zyklus: ${cycleCount % 4} / 4`;
+}
+
+function updateSessionStatus(type) {
+  const statusText = {
+    focus: "Fokuszeit",
+    short: "Kurze Pause",
+    long: "Lange Pause"
+  };
+  document.getElementById("session-status").textContent = `Aktuell: ${statusText[type] || "Fokuszeit"}`;
+    const sessionDiv = document.getElementById("session-status");
+  sessionDiv.textContent = `Aktuell: ${statusText[type] || "Fokuszeit"}`;
+
+  // Alte Klassen entfernen, neue setzen
+  sessionDiv.classList.remove("focus", "short", "long");
+  sessionDiv.classList.add(type);
+}
+
+function switchSession(type) {
+  currentSession = type;
+  secondsLeft = times[type];
+  updateDisplay();
+  updateSessionStatus(type);
+  updateCycleDisplay();
+}
+
 
 // Timer starten
 function startTimer() {
   if (isRunning) return;
   isRunning = true;
   timer = setInterval(() => {
-    if (remainingTime > 0) {
-      remainingTime--;
-      updateDisplay();
-    } else {
+    secondsLeft--;
+    updateDisplay();
+
+    if (secondsLeft <= 0) {
       clearInterval(timer);
       isRunning = false;
-      alert("Zeit ist um! 🎉");
+
+      if (currentSession === "focus") {
+        cycleCount++;
+        updateCycleDisplay();
+        if (cycleCount % 4 === 0) {
+          switchSession("long");
+        } else {
+          switchSession("short");
+        }
+      } else {
+        switchSession("focus");
+      }
+
+      startTimer(); // automatisch weitermachen
     }
   }, 1000);
 }
@@ -63,26 +111,26 @@ function pauseTimer() {
 // Timer zurücksetzen
 function resetTimer() {
   pauseTimer();
-  updateDisplay();
+  switchSession(currentSession);
 }
 
-// Zeit durch Session-Buttons ändern
-sessionButtons.forEach((btn) => {
+// Buttons für Session-Wechsel manuell
+sessionButtons.forEach(btn => {
   btn.addEventListener("click", () => {
+    const type = btn.dataset.time === "25" ? "focus" : btn.dataset.time === "5" ? "short" : "long";
+    cycleCount = 0; // Reset Zyklus bei manuellem Wechsel
+    updateCycleDisplay();
+    switchSession(type);
     pauseTimer();
-    remainingTime = parseInt(btn.dataset.time) * 60;
-    updateDisplay();
   });
 });
 
 // Event-Listener
 startBtn.addEventListener("click", startTimer);
 pauseBtn.addEventListener("click", pauseTimer);
-resetBtn.addEventListener("click", () => {
-  remainingTime = 25 * 60; // Standard auf Fokuszeit
-  resetTimer();
-});
+resetBtn.addEventListener("click", resetTimer);
 
 // Initialanzeige setzen
 updateDisplay();
+updateCycleDisplay();
 
