@@ -511,6 +511,7 @@ ul#task-list li.done {
 }
 
 .logo {
+  padding-left: 3rem;
   width: 40px;
   height: 40px;
 }
@@ -544,6 +545,7 @@ ul#task-list li.done {
   font-size: 0.95rem;
   background: rgba(255,255,255,0.15);
   padding: 0.3rem 0.7rem;
+  margin-right: 3rem;
   border-radius: 20px;
 }
 
@@ -588,3 +590,75 @@ header.app-header {
   transform: scale(1.1);
 }
 
+/** Burger Menü**/
+.burger-menu {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1001;
+}
+
+#burger-toggle {
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+  padding: 0.4rem;
+  border-radius: 8px;
+}
+
+#burger-toggle:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: scale(1.1);
+}
+
+#burger-toggle:active {
+  transform: scale(0.95);
+}
+
+#burger-nav {
+  position: absolute;
+  top: 3rem;
+  left: 0;
+  background: var(--card);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+#burger-nav.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+#burger-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#burger-nav li {
+  margin: 0.5rem 0;
+}
+
+#burger-nav a {
+  text-decoration: none;
+  color: var(--text);
+  display: block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+#burger-nav a:hover {
+  background: var(--accent);
+  color: white;
+}

@@ -52,6 +52,9 @@ const boardTaskInput = document.getElementById("board-task-input");
 const boardCategorySelect = document.getElementById("board-task-category");
 const boardStatusSelect = document.getElementById("board-task-status");
 
+const burgerToggle = document.getElementById("burger-toggle");
+const burgerNav = document.getElementById("burger-nav");
+
 const adminSwitcher = document.getElementById("admin-switcher");
 const formSections = {
   task: document.getElementById("task-form-section"),
@@ -154,6 +157,10 @@ boardTaskForm.addEventListener("submit", (e) => {
   renderTasks();
   renderKanban();
   renderProjectSwitcher();
+});
+
+burgerToggle.addEventListener("click", () => {
+  burgerNav.classList.toggle("show");
 });
 
 // ==============================
