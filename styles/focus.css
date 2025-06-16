@@ -77,10 +77,16 @@ header h1 {
 
 .header-right .theme-toggle {
   font-size: 1.4rem;
+  border-radius: 3rem;
   background: transparent;
   border: none;
   color: white;
   cursor: pointer;
+}
+
+.theme-toggle:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: scale(1.1);
 }
 
 .header-right {
