@@ -66,9 +66,6 @@
     <!-- Musik Player -->
 <section id="music-player">
   <h2><i class="fas fa-music"></i> Hintergrundmusik</h2>
-  <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1KHlxZ2V46MQLtqRjuLctQ?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-  <section id="ambient-sounds">
-    <h2><i class="fas fa-headphones"></i> Alternative Hintergrundmusik</h2>
     <div class="sound-buttons">
       <button data-sound="lofi">🎧 Lofi</button>
       <button data-sound="focus">🧠 Fokus</button>
@@ -76,18 +73,24 @@
       <button id="stop-sound">🛑 Stopp</button>
     </div>
     <audio id="ambient-audio" loop></audio>
-  </section>
 </section>
     <!-- Ambient Video -->
     <section id="ambient-video">
-      <h2><i class="fas fa-video"></i> Ambient Video</h2>
-      <div class="video-thumbnails">
-        <button data-video="video/rain.mp4">🌧 Regen</button>
-        <button data-video="video/library.mp4">📚 Bibliothek</button>
-        <button data-video="video/fireplace.mp4">🔥 Kamin</button>
-      </div>
-      <video id="ambient-player" autoplay loop muted></video>
-    </section>
+  <h2><i class="fas fa-video"></i> Ambient Video</h2>
+  
+  <div class="video-controls">
+    <button data-src="videos/forest.mp4">🌲 Wald</button>
+    <button data-src="videos/cafe.mp4">☕ Café</button>
+    <button data-src="videos/rain.mp4">🌧 Regen</button>
+  </div>
+
+  <div class="video-wrapper">
+    <video id="ambient-player" width="100%" controls loop>
+      <source src="assets/videos/forest.mp4" type="video/mp4" />
+      Dein Browser unterstützt kein Video.
+    </video>
+  </div>
+</section>
   </main>
 
   <footer>
