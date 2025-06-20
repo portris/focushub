@@ -55,6 +55,10 @@ const settingsToggle = document.getElementById("settings-toggle");
 const settingsContent = document.getElementById("settings-content");
 const toggleIcon = settingsToggle.querySelector(".toggle-icon");
 
+const ambientAudio = document.getElementById("ambient-audio");
+const soundButtons = document.querySelectorAll(".sound-buttons button[data-sound]");
+const stopButton = document.getElementById("stop-sound");
+
 // Werte in UI setzen
 focusInput.value = defaultTimes.focus;
 shortInput.value = defaultTimes.short;
@@ -206,6 +210,20 @@ settingsForm.addEventListener("submit", (e) => {
 settingsToggle.addEventListener("click", () => {
   const collapsed = settingsContent.classList.toggle("collapsed");
   toggleIcon.classList.toggle("rotate", !collapsed);
+});
+
+soundButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const sound = btn.dataset.sound;
+    ambientAudio.src = `assets/sounds/${sound}.mp3`;
+    ambientAudio.volume = 0.5;
+    ambientAudio.play();
+  });
+});
+
+stopButton.addEventListener("click", () => {
+  ambientAudio.pause();
+  ambientAudio.currentTime = 0;
 });
 
 // Initialzustand

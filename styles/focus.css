@@ -460,6 +460,49 @@ body.dark #timer-settings-form label {
   margin-top: 0.5rem;
 }
 
+#music, #ambient-sounds {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: var(--card-bg, #f2f2f2);
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+body.dark #music, 
+body.dark #ambient-sounds {
+  background-color: #1e1e1e;
+}
+
+#music h2, #ambient-sounds h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.sound-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sound-buttons button {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.9rem; /* kleineres Padding */
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.15s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  min-width: 90px;
+  text-align: center;
+}
+
+.sound-buttons button:hover {
+  background-color: #4aa452;
+  transform: scale(1.05);
+}
+
 /* Video-Bereich */
 #ambient-controls button {
   margin-right: 0.5rem;
