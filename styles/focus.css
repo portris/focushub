@@ -237,6 +237,26 @@ main {
   gap: 2rem;
 }
 
+ #pomodoro button {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.9rem; /* kleineres Padding */
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.15s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  min-width: 90px;
+  text-align: center;
+}
+
+ #pomodoro button:hover {
+  background-color: #5b9675;
+  transform: scale(1.05);
+}
+
+
 section {
   background: var(--card);
   padding: 1.5rem;
@@ -349,6 +369,89 @@ body.dark #cycle-count {
 #session-status.long {
   border-left: 5px solid #17a2b8; /* blaugrün für lange Pause */
 }
+
+/* Anpassungen für Settings */
+#settings {
+  margin-top: 2rem;
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+#timer-settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+#timer-settings-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  color: var(--text-color, #333);
+}
+
+#timer-settings-form input {
+  width: 60px;
+  padding: 4px;
+}
+
+#timer-settings-form input[type="number"] {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #a3d9a5;
+  border-radius: 0.6rem;
+  background-color: var(--input-bg, #f9f9f9);
+  color: var(--text-color, #333);
+  font-size: 1rem;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+#timer-settings-form input[type="number"]:focus {
+  border-color: #5cbf63;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(92, 191, 99, 0.2);
+}
+
+body.dark #timer-settings-form input[type="number"] {
+  background-color: #2c2c2c;
+  color: #eee;
+  border-color: #5cbf63;
+}
+
+body.dark #timer-settings-form label {
+  color: #ddd;
+}
+
+/* COllapsible Eigenschaft */
+.collapsible h3 {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#settings-content.collapsed {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+#settings-content {
+  max-height: 500px; /* ausreichend Platz */
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.toggle-icon {
+  transition: transform 0.3s ease;
+}
+
+.toggle-icon.rotate {
+  transform: rotate(90deg);
+}
+
 
 /* Musikplayer */
 #music-controls select,

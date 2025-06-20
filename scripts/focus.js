@@ -25,10 +25,16 @@ let startTime = null;
 let endTime = null;
 let remainingSeconds = 25 * 60;
 
-const times = {
-  focus: 25 * 60,
-  short: 5 * 60,
-  long: 15 * 60
+const defaultTimes = {
+  focus: parseInt(localStorage.getItem("focusTime")) || 25,
+  short: parseInt(localStorage.getItem("shortBreak")) || 5,
+  long:  parseInt(localStorage.getItem("longBreak")) || 15
+};
+
+let times = {
+  focus: defaultTimes.focus * 60,
+  short: defaultTimes.short * 60,
+  long:  defaultTimes.long * 60
 };
 
 const display = document.getElementById("timer-display");
@@ -39,6 +45,20 @@ const sessionButtons = document.querySelectorAll(".session-types button");
 
 const burgerToggle = document.getElementById("burger-toggle");
 const burgerNav = document.getElementById("burger-nav");
+
+const settingsForm = document.getElementById("timer-settings-form");
+const focusInput = document.getElementById("focus-duration");
+const shortInput = document.getElementById("short-break-duration");
+const longInput = document.getElementById("long-break-duration");
+
+const settingsToggle = document.getElementById("settings-toggle");
+const settingsContent = document.getElementById("settings-content");
+const toggleIcon = settingsToggle.querySelector(".toggle-icon");
+
+// Werte in UI setzen
+focusInput.value = defaultTimes.focus;
+shortInput.value = defaultTimes.short;
+longInput.value = defaultTimes.long;
 
 // Anzeige aktualisieren
 function updateDisplay(seconds = remainingSeconds) {
@@ -152,6 +172,40 @@ resetBtn.addEventListener("click", resetTimer);
 
 burgerToggle.addEventListener("click", () => {
   burgerNav.classList.toggle("show");
+});
+
+settingsForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const focus = parseInt(focusInput.value);
+  const short = parseInt(shortInput.value);
+  const long = parseInt(longInput.value);
+
+  if (focus > 0 && short > 0 && long > 0) {
+    // Speichern
+    localStorage.setItem("focusTime", focus);
+    localStorage.setItem("shortBreak", short);
+    localStorage.setItem("longBreak", long);
+
+    // Update Times-Objekt
+    times.focus = focus * 60;
+    times.short = short * 60;
+    times.long = long * 60;
+
+    // Optional: aktuelles Session-Zeit aktualisieren
+    if (!isRunning) {
+      switchSession(currentSession);
+    }
+
+    alert("Timer-Einstellungen gespeichert!");
+  } else {
+    alert("Bitte nur positive Zahlen eingeben.");
+  }
+});
+
+settingsToggle.addEventListener("click", () => {
+  const collapsed = settingsContent.classList.toggle("collapsed");
+  toggleIcon.classList.toggle("rotate", !collapsed);
 });
 
 // Initialzustand

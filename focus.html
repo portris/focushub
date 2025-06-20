@@ -43,6 +43,17 @@
         <button id="pause-btn"><i class="fas fa-pause"></i></button>
         <button id="reset-btn"><i class="fas fa-rotate-left"></i></button>
       </div>
+      <section id="settings" class="collapsible">
+        <h3 id="settings-toggle">🛠 Timer-Einstellungen <span class="toggle-icon">▶</span></h3>
+        <div id="settings-content" class="collapsed">
+          <form id="timer-settings-form">
+            <label>Fokuszeit (Minuten): <input type="number" id="focus-duration" min="1" value="25" /></label>
+            <label>Kurze Pause (Minuten): <input type="number" id="short-break-duration" min="1" value="5" /></label>
+            <label>Lange Pause (Minuten): <input type="number" id="long-break-duration" min="1" value="15" /></label>
+            <button type="submit">Speichern</button>
+          </form>
+        </div>
+      </section>
       <div id="cycle-indicator">Pomodoro-Zyklus: 0 / 4</div>
       <div id="session-status">Aktuell: Fokuszeit</div>
       <div class="session-types">
