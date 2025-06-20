@@ -26,9 +26,9 @@ let endTime = null;
 let remainingSeconds = 25 * 60;
 
 const times = {
-  focus: 1 * 60,
-  short: 1 * 60,
-  long: 1 * 60
+  focus: 25 * 60,
+  short: 5 * 60,
+  long: 15 * 60
 };
 
 const display = document.getElementById("timer-display");
