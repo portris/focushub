@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
+<div class="page-wrapper">
+  <video id="background-video" autoplay muted loop playsinline></video>
 <header class="app-header">
   <div class="header-left">
     <div class="burger-menu">
@@ -32,6 +34,30 @@
   </div>
   
 </header>
+
+<!-- Steuerungsleiste oben -->
+<div class="top-control-bar">
+  <div class="control-section">
+    <h3><i class="fas fa-video"></i> Ambient Video</h3>
+    <div class="video-controls">
+      <button data-src="assets/videos/forest.mp4">🌲 Wald</button>
+      <button data-src="assets/videos/cafe.mp4">☕ Café</button>
+      <button data-src="assets/videos/rain.mp4">🌧 Regen</button>
+      <button id="stop-video">🛑 Stop</button>
+    </div>
+  </div>
+
+  <div class="control-section">
+  <h3><i class="fas fa-music"></i> Hintergrundmusik</h3>
+    <div class="sound-buttons">
+      <button data-sound="lofi">🎧 Lofi</button>
+      <button data-sound="focus">🧠 Fokus</button>
+      <button data-sound="calm">🌿 Ruhe</button>
+      <button id="stop-sound">🛑 Stopp</button>
+    </div>
+    <audio id="ambient-audio" loop></audio>
+</div>
+</div>
 
   <main>
     <!-- Pomodoro Timer -->
@@ -62,8 +88,7 @@
         <button data-time="15">Long Break</button>
       </div>
     </section>
-
-    <!-- Musik Player -->
+<!--
 <section id="music-player">
   <h2><i class="fas fa-music"></i> Hintergrundmusik</h2>
     <div class="sound-buttons">
@@ -74,7 +99,7 @@
     </div>
     <audio id="ambient-audio" loop></audio>
 </section>
-    <!-- Ambient Video -->
+
     <section id="ambient-video">
   <h2><i class="fas fa-video"></i> Ambient Video</h2>
   
@@ -91,8 +116,9 @@
     </video>
   </div>
 </section>
+    -->
   </main>
-
+  </div>
   <footer>
     <p>&copy; <span id="year"></span> FocusHub by Richard Franken</p>
   </footer>

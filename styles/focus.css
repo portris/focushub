@@ -21,7 +21,7 @@ body {
   transition: background 0.3s ease, color 0.3s ease;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+
 }
 
 header {
@@ -229,7 +229,6 @@ nav a:hover {
 }
 
 main {
-  flex: 1;
   padding: 2rem;
   max-width: 1000px;
   margin: 0 auto;
@@ -526,11 +525,120 @@ video {
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
+/* Hintergrundvideo */
+#background-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1; /* damit es ganz im Hintergrund ist */
+  opacity: 0.4; /* du kannst den Wert anpassen */
+  pointer-events: none; /* sorgt dafür, dass es Klicks nicht blockiert */
+}
+
+/* Obere Steuerungsleiste */
+/* Toggle-Button */
+#toggle-control-bar {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #2e2e2e;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+  display: block;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.3s ease;
+}
+
+#toggle-control-bar:hover {
+  background-color: #444;
+}
+
+/* Die Kontrollleiste */
+/* Top Control Bar direkt unter dem Header */
+.top-control-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+  padding: 1.5rem 2rem;
+  background-color: rgba(30, 30, 30, 0.66);
+  color: white;
+  backdrop-filter: blur(5px);
+  position: relative;
+  z-index: 5;
+  margin-top: 0; /* Direkt unter dem Header */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  border-radius: 0 0 1rem 1rem;
+  flex-wrap: wrap;
+}
+
+/* Überschriften */
+.top-control-bar h3 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #ccc;
+}
+
+/* Abschnittsbreite */
+.video-section, .music-section {
+  flex: 1 1 300px;
+  min-width: 280px;
+}
+
+/* Buttons innerhalb der Leiste */
+.top-control-bar button {
+  margin: 0.3rem;
+  padding: 0.6rem 1.1rem;
+  border: none;
+  border-radius: 8px;
+  background: #3c3c3c;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.top-control-bar button:hover {
+  background: #4caf50;
+  transform: translateY(-2px);
+}
+
+.top-control-bar button:active {
+  background: #388e3c;
+  transform: scale(0.98);
+}
+
+
+
+
 /* Footer */
 footer {
+  padding: 1rem;
   text-align: center;
   padding: 1rem;
   background: var(--accent);
   color: white;
+}
+
+/* Page Wrapper */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 

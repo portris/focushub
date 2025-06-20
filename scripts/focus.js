@@ -59,6 +59,10 @@ const ambientAudio = document.getElementById("ambient-audio");
 const soundButtons = document.querySelectorAll(".sound-buttons button[data-sound]");
 const stopButton = document.getElementById("stop-sound");
 
+const videoButtons = document.querySelectorAll(".video-controls button");
+const backgroundVideo = document.getElementById("background-video");
+const stopVideoBtn = document.getElementById("stop-video");
+
 // Werte in UI setzen
 focusInput.value = defaultTimes.focus;
 shortInput.value = defaultTimes.short;
@@ -224,6 +228,24 @@ soundButtons.forEach(btn => {
 stopButton.addEventListener("click", () => {
   ambientAudio.pause();
   ambientAudio.currentTime = 0;
+});
+
+videoButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    const src = button.dataset.src;
+    if (src && backgroundVideo) {
+      backgroundVideo.src = src;
+      backgroundVideo.play();
+    }
+  });
+});
+
+stopVideoBtn.addEventListener("click", () => {
+  if (backgroundVideo) {
+    backgroundVideo.pause();
+    backgroundVideo.removeAttribute("src");
+    backgroundVideo.load();
+  }
 });
 
 // Initialzustand
