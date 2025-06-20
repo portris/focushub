@@ -3,13 +3,11 @@ const themeToggle = document.getElementById("theme-toggle");
 if (themeToggle) {
   const body = document.body;
 
-  // Theme beim Laden anwenden
   if (localStorage.getItem("theme") === "dark") {
     body.classList.add("dark");
     themeToggle.textContent = "☀️";
   }
 
-  // Theme-Toggle
   themeToggle.addEventListener("click", () => {
     body.classList.toggle("dark");
     const isDark = body.classList.contains("dark");
@@ -19,12 +17,20 @@ if (themeToggle) {
 }
 
 let timer;
-let secondsLeft = 1500; // 25 min default
 let isRunning = false;
 let cycleCount = 0;
 let currentSession = "focus";
 
-// Elemente holen
+let startTime = null;
+let endTime = null;
+let remainingSeconds = 25 * 60;
+
+const times = {
+  focus: 1 * 60,
+  short: 1 * 60,
+  long: 1 * 60
+};
+
 const display = document.getElementById("timer-display");
 const startBtn = document.getElementById("start-btn");
 const pauseBtn = document.getElementById("pause-btn");
@@ -34,56 +40,56 @@ const sessionButtons = document.querySelectorAll(".session-types button");
 const burgerToggle = document.getElementById("burger-toggle");
 const burgerNav = document.getElementById("burger-nav");
 
-const times = {
-  focus: 25 * 60,
-  short: 5 * 60,
-  long:  15 * 60
-};
-
-// Zeit aktualisieren
-function updateDisplay() {
-  const minutes = Math.floor(secondsLeft / 60);
-  const seconds = secondsLeft % 60;
-  display.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+// Anzeige aktualisieren
+function updateDisplay(seconds = remainingSeconds) {
+  const min = Math.floor(seconds / 60);
+  const sec = seconds % 60;
+  display.textContent = `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
 }
 
+// Zyklus anzeigen
 function updateCycleDisplay() {
   const indicator = document.getElementById("cycle-indicator");
   indicator.textContent = `Pomodoro-Zyklus: ${cycleCount % 4} / 4`;
 }
 
+// Session-Status anzeigen
 function updateSessionStatus(type) {
   const statusText = {
     focus: "Fokuszeit",
     short: "Kurze Pause",
     long: "Lange Pause"
   };
-  document.getElementById("session-status").textContent = `Aktuell: ${statusText[type] || "Fokuszeit"}`;
-    const sessionDiv = document.getElementById("session-status");
-  sessionDiv.textContent = `Aktuell: ${statusText[type] || "Fokuszeit"}`;
 
-  // Alte Klassen entfernen, neue setzen
+  const sessionDiv = document.getElementById("session-status");
+  sessionDiv.textContent = `Aktuell: ${statusText[type] || "Fokuszeit"}`;
   sessionDiv.classList.remove("focus", "short", "long");
   sessionDiv.classList.add(type);
 }
 
+// Session wechseln
 function switchSession(type) {
   playNotificationSound();
   currentSession = type;
-  secondsLeft = times[type];
-  updateDisplay();
+  remainingSeconds = times[type];
   updateSessionStatus(type);
   updateCycleDisplay();
+  updateDisplay();    
 }
-
 
 // Timer starten
 function startTimer() {
   if (isRunning) return;
   isRunning = true;
+
+  // Starte mit dem aktuellen Wert in remainingSeconds
+  startTime = Date.now();
+  endTime = startTime + remainingSeconds * 1000;
+
   timer = setInterval(() => {
-    secondsLeft--;
-    updateDisplay();
+    const now = Date.now();
+    const secondsLeft = Math.max(0, Math.round((endTime - now) / 1000));
+    updateDisplay(secondsLeft);
 
     if (secondsLeft <= 0) {
       clearInterval(timer);
@@ -92,17 +98,15 @@ function startTimer() {
       if (currentSession === "focus") {
         cycleCount++;
         updateCycleDisplay();
-        if (cycleCount % 4 === 0) {
-          switchSession("long");
-        } else {
-          switchSession("short");
-        }
+        switchSession(cycleCount % 4 === 0 ? "long" : "short");
       } else {
         switchSession("focus");
       }
 
-      startTimer(); // automatisch weitermachen
+      startTimer(); // Starte nächste Session automatisch
     }
+
+    remainingSeconds = secondsLeft; // Laufzeit-Zwischenspeicher
   }, 1000);
 }
 
@@ -110,6 +114,8 @@ function startTimer() {
 function pauseTimer() {
   clearInterval(timer);
   isRunning = false;
+  const now = Date.now();
+  remainingSeconds = Math.max(0, Math.round((endTime - now) / 1000));
 }
 
 // Timer zurücksetzen
@@ -118,7 +124,7 @@ function resetTimer() {
   switchSession(currentSession);
 }
 
-// Notification Sound für Benachrichtigugn bei Timerende
+// Sound abspielen
 function playNotificationSound() {
   const audio = document.getElementById("notification-sound");
   if (audio) {
@@ -127,14 +133,15 @@ function playNotificationSound() {
   }
 }
 
-// Buttons für Session-Wechsel manuell
+// Session Buttons
 sessionButtons.forEach(btn => {
   btn.addEventListener("click", () => {
     const type = btn.dataset.time === "25" ? "focus" : btn.dataset.time === "5" ? "short" : "long";
-    cycleCount = 0; // Reset Zyklus bei manuellem Wechsel
-    updateCycleDisplay();
-    switchSession(type);
+    cycleCount = 0;
     pauseTimer();
+    switchSession(type);
+    updateCycleDisplay();
+    updateDisplay();
   });
 });
 
@@ -147,7 +154,7 @@ burgerToggle.addEventListener("click", () => {
   burgerNav.classList.toggle("show");
 });
 
-// Initialanzeige setzen
-updateDisplay();
+// Initialzustand
+switchSession("focus");
 updateCycleDisplay();
-
+updateDisplay();
