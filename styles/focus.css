@@ -563,7 +563,6 @@ video {
 /* Die Kontrollleiste */
 /* Top Control Bar direkt unter dem Header */
 .top-control-bar {
-  width: 100%;
   display: flex;
   justify-content: space-around;
   gap: 2rem;
@@ -640,32 +639,5 @@ html, body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-/* BODY und HTML müssen volle Höhe einnehmen */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-/* Wrapper als Flex-Container */
-.page-wrapper {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Hauptinhalt dehnt sich */
-main, .main-content {
-  flex: 1 0 auto;
-}
-
-/* Footer bleibt unten */
-footer {
-  flex-shrink: 0;
-  padding: 1rem;
-  text-align: center;
-  font-size: 0.9rem;
 }
 
