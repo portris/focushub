@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FocusHub – ToDo</title>
+  <link rel="stylesheet" href="styles/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body>
+  <!-- HEADER -->
+<header class="app-header">
+  <div class="header-left">
+    <img href="https://storyset.com/people" src="assets/images/Mental health-bro.svg" alt="FocusHub Logo" class="logo" />
+    <div class="title-group">
+      <h1>FocusHub</h1>
+      <p class="subtitle">Deine smarte Aufgabenverwaltung</p>
+    </div>
+  </div>
+    <nav class="mini-nav">
+    <button class="nav-btn" data-target="board" title="Zum Board">📋 Board</button>
+    <button class="nav-btn" data-target="task" title="Aufgaben verwalten">📝 Tasks</button>
+    <button class="nav-btn" data-target="category" title="Kategorien verwalten">🏷 Kategorien</button>
+    <button class="nav-btn" data-target="project" title="Projekte verwalten">📁 Projekte</button>
+  </nav>
+  <div class="header-right">    <span class="project-indicator" > <span id="header-project-name">Kein Projekt</span></span>
+    <button id="theme-toggle" class="theme-toggle" title="Theme wechseln">🌙</button>
+    <div class="burger-menu">
+      <button id="burger-toggle"><i class="fas fa-bars"></i></button>
+      <nav id="burger-nav">
+        <ul>
+          <li><a href="kanban.html">🏠 Kanban Board</a></li>
+          <li><a href="focus.html">🎯 Fokusmodus</a></li>
+        </ul>
+      </nav>
+    </div>
+    <!--<button class="user-icon" title="Demnächst: Profil">👤</button>-->
+  </div>
+  
+</header>
+
+  <!-- ADMIN-BEREICH: Dropdown + Eingabeformulare -->
+    <div id="admin-scroll-wrapper">
+    <section id="admin-forms">
+
+      <!-- Aufgabenformular -->
+      <div class="admin-form" id="task-form-section">
+        <section id="filter-section">
+          <label for="category-filter">Kategorie filtern:</label>
+          <select id="category-filter">
+            <option value="Alle">Alle</option>
+            <!-- Weitere Optionen werden per JS ergänzt -->
+          </select>
+          <label for="project-filter">Projekt filtern:</label>
+          <select id="project-filter">
+            <option value="Alle">Alle</option>
+            <!-- Weitere Optionen werden per JS ergänzt -->
+          </select>
+        </section>
+
+        <form id="task-form">
+          <input type="text" id="task-input" placeholder="Neue Aufgabe..." required />
+          <select id="task-category">
+          </select>
+          <select id="task-project" required>
+            <option value="" disabled selected>Projekt wählen</option>
+          </select>
+          <button type="submit"><i class="fas fa-plus"></i></button>
+        </form>
+
+        <ul id="task-list"></ul>
+      
+      <!-- Kategorienformular -->
+      </div>
+      <div class="admin-form" id="category-form-section">
+        <section id="category-manager">
+          <h3>Kategorien verwalten</h3>
+          <form id="category-form">
+            <input type="text" id="new-category-name" placeholder="Neue Kategorie" required />
+            <input type="color" id="new-category-color" value="#6c757d" />
+            <button type="submit"><i class="fas fa-plus"></i></button>
+          </form>
+          <ul id="category-list"></ul>
+        </section>
+      </div>
+
+      <!-- Projektformular -->
+      <div class="admin-form" id="project-form-section">
+        <section id="project-manager">
+          <h3>Projekte verwalten</h3>
+          <form id="project-form">
+            <input type="text" id="new-project-name" placeholder="Neues Projekt" required />
+            <button type="submit"><i class="fas fa-plus"></i></button>
+          </form>
+          <ul id="project-list"></ul>
+        </section>
+      </div>
+    </section>
+    </div>
+
+  <!-- KANBAN BOARD + TASK ERSTELLUNG -->
+  <main class="todo-app">
+    <!-- Projektwechsel Dropdown -->
+    <section id="kanban-controls">
+      <label for="project-switcher"></label>
+      <select id="project-switcher"></select>
+    </section>
+
+    <!-- Formular für neue Aufgaben direkt im Board -->
+    <section id="kanban-task-form">
+      <h3>Neue Aufgabe im Projekt "<span id="form-project-name"></span>"</h3>
+      <form id="board-task-form">
+        <input type="text" id="board-task-input" placeholder="Aufgabenbeschreibung" required />
+    
+        <select id="board-task-category" required>
+          <option value="" disabled selected>Kategorie wählen</option>
+        </select>
+
+        <select id="board-task-status" required>
+          <option value="todo">📝 To Do</option>
+          <option value="inprogress">🔄 In Progress</option>
+          <option value="done">✅ Done</option>
+        </select>
+
+        <button type="submit"><i class="fas fa-plus"></i></button>
+      </form>
+    </section>
+
+    <!-- Kanban Board Ansicht -->
+    <section id="kanban-board">
+      <h2>Projektübersicht: <span id="active-project-name"></span></h2>
+      <div class="board-columns">
+        <div class="board-column" data-status="todo">
+          <h3>📝 To Do</h3>
+          <div class="column-tasks" id="todo-tasks"></div>
+        </div>
+
+        <div class="board-column" data-status="inprogress">
+          <h3>🔄 In Progress</h3>
+          <div class="column-tasks" id="inprogress-tasks"></div>
+        </div>
+
+        <div class="board-column" data-status="done">
+          <h3>✅ Done</h3>
+          <div class="column-tasks" id="done-tasks"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+   <!-- FOOTER -->
+  <footer>
+    <p>&copy; <span id="year"></span> FocusHub by Richard Franken</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="scripts/main.js"></script>
+</body>
+</html>

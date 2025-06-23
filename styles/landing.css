@@ -432,3 +432,26 @@ header.app-header {
 .feature-image:hover img {
   transform: scale(1.02);
 }
+
+.feature-section a {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.9rem; /* kleineres Padding */
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.15s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  min-width: 90px;
+  text-align: center;
+}
+
+.feature-section a:hover {
+  background-color: #5b9675;
+  transform: scale(1.05);
+}
+
+.feature-sectiona a:active {
+  transform: scale(0.95);
+}
